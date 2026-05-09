@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<!-- saved from url=(0036)https://brave-cities-invite.loca.lt/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>餐饮每日经营复盘</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --lunch: #f97316;
+      --dinner: #8b5cf6;
+      --delivery: #06b6d4;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 70px;
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      padding: 20px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .header p {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+    
+    /* Main Content */
+    .container {
+      padding: 16px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    
+    /* Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .card-title::before {
+      content: "";
+      width: 4px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    
+    .card-title.orange::before { background: var(--lunch); }
+    .card-title.purple::before { background: var(--dinner); }
+    .card-title.cyan::before { background: var(--delivery); }
+    
+    /* Form */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: var(--card-bg);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .form-input::placeholder {
+      color: #94a3b8;
+    }
+    
+    textarea.form-input {
+      min-height: 70px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    
+    /* Grid Layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    
+    /* Sub Section */
+    .sub-section {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .sub-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .sub-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .sub-title span {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: white;
+    }
+    
+    /* Summary Stats */
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .stat-item {
+      background: var(--bg);
+      padding: 10px 6px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .stat-value.orange { color: var(--lunch); }
+    .stat-value.purple { color: var(--dinner); }
+    .stat-value.cyan { color: var(--delivery); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.red { color: var(--danger); }
+    
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    
+    /* Button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+    }
+    
+    .btn-primary:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+    }
+    
+    .btn-success:active {
+      transform: scale(0.98);
+    }
+    
+    /* Result */
+    .result-section {
+      margin-bottom: 14px;
+    }
+    
+    .result-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .result-title .icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: white;
+    }
+    
+    .icon-summary { background: var(--primary); }
+    .icon-analysis { background: var(--warning); }
+    .icon-suggest { background: var(--success); }
+    
+    .result-content {
+      background: var(--bg);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+    
+    .result-content.empty {
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+    
+    /* History */
+    .history-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .history-shop {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .history-date {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .history-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    
+    .history-stats span {
+      background: var(--bg);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    
+    .history-delete {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: #fef2f2;
+      color: var(--danger);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    
+    .history-detail {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    
+    .history-detail.show {
+      display: block;
+    }
+    
+    .history-detail p {
+      margin-bottom: 6px;
+    }
+    
+    .history-detail .label {
+      font-weight: 600;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+    
+    /* Tab Bar */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      display: flex;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+      z-index: 100;
+    }
+    
+    .tab-item {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    
+    .tab-item.active {
+      color: var(--primary);
+    }
+    
+    .tab-item .tab-icon {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    /* Loading */
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .loading::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .toast.show {
+      opacity: 1;
+    }
+    
+    /* View */
+    .view {
+      display: none;
+    }
+    
+    .view.active {
+      display: block;
+    }
+    
+    /* Section divider */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+  </style>
+<style>.Po4BvhR1CK2tJaywJ6AN path {
+  fill: var(--icon-path-fill);
+}
+.Oz4yDjua3Qe6thqkZYf_ path {
+  transition: 0.2s all;
+}
+.Oz4yDjua3Qe6thqkZYf_:hover path {
+  fill: var(--icon-hover-fill);
+}
+</style><style>/* ！！！切勿直接改动该文件，该文件由 generator.ts 自动生成！！！ */
+/* !!! DONT MODIFY THIS FILE DIRECTLY, THIS FILE IS GENERATED BY generator.ts AUTOMATICALLY !!! */
+.ibW4Oa5B7s2zJKKZ4pCg {
+  user-select: none;
+}
+.AtqKyJetjrG4smuk35Np {
+  max-width: 346px;
+  width: auto;
+  height: 36px;
+  background-color: var(--quark-style-white-color, #fff);
+  padding-left: 10px;
+  padding-right: 4px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid var(--quark-style-gray-20-color, rgba(6, 10, 38, 0.12));
+  box-shadow: 0 12px 32px -6px var(--quark-style-gray-30-fixed-color, rgba(6, 10, 38, 0.24));
+  border-radius: 10px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .g6iGsZa_KHMeW2yICzQQ {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .e4UXx38MPgfHdym_Lzt0 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 28px;
+  padding: 0 6px;
+  margin-right: 2px;
+  border-radius: 6px;
+  column-gap: 4px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .e4UXx38MPgfHdym_Lzt0:hover:not(.ibW4Oa5B7s2zJKKZ4pCg .kNOcXLDT_cCrcoY8LTm8) {
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ibW4Oa5B7s2zJKKZ4pCg .kNOcXLDT_cCrcoY8LTm8 {
+  cursor: default;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .kNOcXLDT_cCrcoY8LTm8 .Va3czASiR9Zztyl_lD4M {
+  color: var(--quark-style-gray-40-color, rgba(6, 10, 38, 0.4)) !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .e4UXx38MPgfHdym_Lzt0 .Va3czASiR9Zztyl_lD4M {
+  font-size: 12px;
+  color: var(--quark-style-gray-color, #060A26);
+  line-height: 16px;
+  white-space: nowrap;
+  position: relative;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .llw0qsmiI_08u93bFdNg {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  overflow: visible !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .LEo8kpqIERehkv8AhAfG {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 6px;
+  overflow: visible !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .LEo8kpqIERehkv8AhAfG:hover {
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ibW4Oa5B7s2zJKKZ4pCg .zoNmooxAnbLEJSN8m1Jg {
+  box-sizing: border-box;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px;
+  max-height: 136px;
+  height: auto;
+  top: 36px;
+  right: -5px;
+  padding: 4px 0;
+  background-color: var(--quark-style-white-color, #fff);
+  border: 1px solid var(--quark-style-gray-20-color, rgba(6, 10, 38, 0.12));
+  box-shadow: 0 4px 16px -6px var(--quark-style-gray-20-fixed-color, rgba(6, 10, 38, 0.12));
+  border-radius: 8px;
+  overflow: visible !important;
+  row-gap: 4px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .O1imPofna4elG_8NcQnR {
+  top: -77px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .mdH0IY7jS3Swn5vdX6tz {
+  width: 102px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  column-gap: 8px;
+  border-radius: 6px;
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .mdH0IY7jS3Swn5vdX6tz:hover:not(.ibW4Oa5B7s2zJKKZ4pCg .dEdHLVmn_L2GAzb_cmwt) {
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ibW4Oa5B7s2zJKKZ4pCg .dEdHLVmn_L2GAzb_cmwt {
+  cursor: default;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .dEdHLVmn_L2GAzb_cmwt .zEraruudgjR2MToGu4Kw {
+  color: var(--quark-style-gray-40-color, rgba(6, 10, 38, 0.4)) !important;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .XfCMwvO0DsqFCeyzPYP2 {
+  width: 16px;
+  height: 16px;
+}
+.ibW4Oa5B7s2zJKKZ4pCg .zEraruudgjR2MToGu4Kw {
+  font-size: 12px;
+  color: var(--quark-style-gray-color, #060A26);
+}
+.ibW4Oa5B7s2zJKKZ4pCg .KZeoAuXbMIkWzOT4PcH5 {
+  width: 100%;
+  height: 1px;
+  background: var(--quark-style-gray-10-color, rgba(6, 10, 38, 0.06));
+}
+.ZL32C_XdLL8UQRZ3zObd {
+  display: flex;
+  align-items: center;
+}
+.u5llx7cIQZLdrjP5Vag1 {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  cursor: pointer;
+  margin-right: 12px;
+  background: var(--quark-style-gray-60-color, rgba(6, 10, 38, 0.6));
+}
+.ZL32C_XdLL8UQRZ3zObd .LEo8kpqIERehkv8AhAfG {
+  border-radius: 16px !important;
+  background: var(--quark-style-gray-60-color, rgba(6, 10, 38, 0.6)) !important;
+}
+.ZL32C_XdLL8UQRZ3zObd .zoNmooxAnbLEJSN8m1Jg {
+  right: 0 !important;
+}
+.ZL32C_XdLL8UQRZ3zObd {
+  overflow: visible !important;
+}
+</style></head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>餐饮每日经营复盘</h1>
+    <p>数据记录 · 智能分析 · 持续优化</p>
+  </div>
+  
+  <!-- Home View -->
+  <div id="home-view" class="container view active">
+    <!-- Basic Info Card -->
+    <div class="card">
+      <div class="card-title">基本信息</div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">日期</label>
+          <input type="date" id="input-date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">店铺名称</label>
+          <input type="text" id="input-shop" class="form-input" placeholder="例如：星巴克万达店">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Daily Summary Card -->
+    <div class="card">
+      <div class="card-title">当日汇总</div>
+      
+      <div class="summary-stats" id="summary-stats">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-revenue">-</div>
+          <div class="stat-label">实收</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-customers">-</div>
+          <div class="stat-label">客流</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-per">-</div>
+          <div class="stat-label">人均</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-rate">-</div>
+          <div class="stat-label">达标率</div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">当日实收（元）</label>
+          <input type="number" id="input-revenue" class="form-input" placeholder="8500" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">月累计达标率（%）</label>
+          <input type="number" id="input-rate" class="form-input" placeholder="95" min="0" max="200" step="0.1">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">当天订单数</label>
+          <input type="number" id="input-orders" class="form-input" placeholder="128" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">到店客流（人）</label>
+          <input type="number" id="input-customers" class="form-input" placeholder="128" min="0">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">人均消费（元）</label>
+          <input type="number" id="input-per" class="form-input" placeholder="66" min="0" step="0.1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">当天收藏打卡</label>
+          <input type="number" id="input-checkin" class="form-input" placeholder="12" min="0">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">当天好评数</label>
+          <input type="number" id="input-good" class="form-input" placeholder="8" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">当天差评数</label>
+          <input type="number" id="input-bad" class="form-input" placeholder="1" min="0">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Lunch Card -->
+    <div class="card">
+      <div class="card-title orange">午市营收</div>
+      
+      <div class="sub-section">
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label">食品</label>
+            <input type="number" id="input-lunch-food" class="form-input" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">酒水</label>
+            <input type="number" id="input-lunch-drink" class="form-input" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">其他</label>
+            <input type="number" id="input-lunch-other" class="form-input" placeholder="0" min="0">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">接待（人）</label>
+            <input type="number" id="input-lunch-pax" class="form-input" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">单数</label>
+            <input type="number" id="input-lunch-orders" class="form-input" placeholder="0" min="0">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">人均（元）</label>
+          <input type="number" id="input-lunch-per" class="form-input" placeholder="0" min="0" step="0.1">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Dinner Card -->
+    <div class="card">
+      <div class="card-title purple">晚市营收</div>
+      
+      <div class="sub-section">
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label">食品</label>
+            <input type="number" id="input-dinner-food" class="form-input" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">酒水</label>
+            <input type="number" id="input-dinner-drink" class="form-input" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">其他</label>
+            <input type="number" id="input-dinner-other" class="form-input" placeholder="0" min="0">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">接待（人）</label>
+            <input type="number" id="input-dinner-pax" class="form-input" placeholder="0" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">单数</label>
+            <input type="number" id="input-dinner-orders" class="form-input" placeholder="0" min="0">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">人均（元）</label>
+          <input type="number" id="input-dinner-per" class="form-input" placeholder="0" min="0" step="0.1">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Delivery Card -->
+    <div class="card">
+      <div class="card-title cyan">外卖数据</div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">外卖单量（单）</label>
+          <input type="number" id="input-delivery-count" class="form-input" placeholder="45" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">外卖收入（元）</label>
+          <input type="number" id="input-delivery-revenue" class="form-input" placeholder="1800" min="0">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Loss & Problems Card -->
+    <div class="card">
+      <div class="card-title">损耗与问题</div>
+      
+      <div class="form-group">
+        <label class="form-label">食材损耗（元）</label>
+        <input type="number" id="input-loss" class="form-input" placeholder="320" min="0">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">主要问题（选填）</label>
+        <textarea id="input-problems" class="form-input" placeholder="简述今日遇到的主要问题..."></textarea>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <button id="btn-generate" class="btn btn-primary">
+      <span>生成分析</span>
+    </button>
+    
+    <div style="height: 12px;"></div>
+    
+    <button id="btn-save" class="btn btn-success" disabled="">
+      <span>保存记录</span>
+    </button>
+    
+    <!-- Result Card -->
+    <div class="card" id="result-card" style="display: none;">
+      <div class="card-title">分析结果</div>
+      
+      <div class="result-section">
+        <div class="result-title">
+          <span class="icon icon-summary">1</span>
+          当日经营小结
+        </div>
+        <div class="result-content empty" id="result-summary">点击上方「生成分析」获取小结</div>
+      </div>
+      
+      <div class="result-section">
+        <div class="result-title">
+          <span class="icon icon-analysis">2</span>
+          问题分析
+        </div>
+        <div class="result-content empty" id="result-analysis">点击上方「生成分析」获取分析</div>
+      </div>
+      
+      <div class="result-section">
+        <div class="result-title">
+          <span class="icon icon-suggest">3</span>
+          优化建议
+        </div>
+        <div class="result-content empty" id="result-suggestions">点击上方「生成分析」获取建议</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- History View -->
+  <div id="history-view" class="container view">
+    <div id="history-list"></div>
+    <div class="empty-state" id="history-empty" style="display: block;">
+      <div class="icon">📋</div>
+      <p>暂无历史记录</p>
+      <p style="margin-top: 4px; font-size: 12px;">完成今日复盘后会自动保存</p>
+    </div>
+  </div>
+  
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab-item active" data-tab="home">
+      <span class="tab-icon">✏️</span>
+      今日复盘
+    </button>
+    <button class="tab-item" data-tab="history">
+      <span class="tab-icon">📊</span>
+      历史记录
+    </button>
+  </div>
+  
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // State
+    let currentData = {};
+    
+    // DOM Elements
+    const inputDate = document.getElementById('input-date');
+    const inputShop = document.getElementById('input-shop');
+    const inputRevenue = document.getElementById('input-revenue');
+    const inputRate = document.getElementById('input-rate');
+    const inputOrders = document.getElementById('input-orders');
+    const inputCustomers = document.getElementById('input-customers');
+    const inputPer = document.getElementById('input-per');
+    const inputCheckin = document.getElementById('input-checkin');
+    const inputGood = document.getElementById('input-good');
+    const inputBad = document.getElementById('input-bad');
+    const inputLunchFood = document.getElementById('input-lunch-food');
+    const inputLunchDrink = document.getElementById('input-lunch-drink');
+    const inputLunchOther = document.getElementById('input-lunch-other');
+    const inputLunchPax = document.getElementById('input-lunch-pax');
+    const inputLunchOrders = document.getElementById('input-lunch-orders');
+    const inputLunchPer = document.getElementById('input-lunch-per');
+    const inputDinnerFood = document.getElementById('input-dinner-food');
+    const inputDinnerDrink = document.getElementById('input-dinner-drink');
+    const inputDinnerOther = document.getElementById('input-dinner-other');
+    const inputDinnerPax = document.getElementById('input-dinner-pax');
+    const inputDinnerOrders = document.getElementById('input-dinner-orders');
+    const inputDinnerPer = document.getElementById('input-dinner-per');
+    const inputDeliveryCount = document.getElementById('input-delivery-count');
+    const inputDeliveryRevenue = document.getElementById('input-delivery-revenue');
+    const inputLoss = document.getElementById('input-loss');
+    const inputProblems = document.getElementById('input-problems');
+    
+    const resultCard = document.getElementById('result-card');
+    const resultSummary = document.getElementById('result-summary');
+    const resultAnalysis = document.getElementById('result-analysis');
+    const resultSuggestions = document.getElementById('result-suggestions');
+    
+    const btnGenerate = document.getElementById('btn-generate');
+    const btnSave = document.getElementById('btn-save');
+    
+    const homeView = document.getElementById('home-view');
+    const historyView = document.getElementById('history-view');
+    const historyList = document.getElementById('history-list');
+    const historyEmpty = document.getElementById('history-empty');
+    const toast = document.getElementById('toast');
+    
+    // Initialize
+    function init() {
+      inputDate.value = formatDate(new Date());
+      loadTodayRecord();
+      setupEventListeners();
+      renderHistory();
+    }
+    
+    function setupEventListeners() {
+      // Tab switching
+      document.querySelectorAll('.tab-item').forEach(tab => {
+        tab.addEventListener('click', () => {
+          switchTab(tab.dataset.tab);
+        });
+      });
+      
+      // Input changes
+      const inputs = document.querySelectorAll('.form-input');
+      inputs.forEach(input => {
+        input.addEventListener('input', updateStatsPreview);
+      });
+      
+      btnGenerate.addEventListener('click', generateAnalysis);
+      btnSave.addEventListener('click', saveRecord);
+    }
+    
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+      
+      homeView.classList.remove('active');
+      historyView.classList.remove('active');
+      
+      if (tabName === 'home') {
+        homeView.classList.add('active');
+      } else {
+        historyView.classList.add('active');
+        renderHistory();
+      }
+    }
+    
+    function updateStatsPreview() {
+      const revenue = parseFloat(inputRevenue.value) || 0;
+      const customers = parseInt(inputCustomers.value) || 0;
+      const per = parseFloat(inputPer.value) || 0;
+      const rate = parseFloat(inputRate.value) || 0;
+      
+      document.getElementById('stat-revenue').textContent = revenue > 0 ? `¥${revenue}` : '-';
+      document.getElementById('stat-customers').textContent = customers || '-';
+      document.getElementById('stat-per').textContent = per > 0 ? `¥${per}` : '-';
+      document.getElementById('stat-rate').textContent = rate > 0 ? `${rate}%` : '-';
+    }
+    
+    function generateAnalysis() {
+      const shop = inputShop.value.trim();
+      const revenue = parseFloat(inputRevenue.value) || 0;
+      const customers = parseInt(inputCustomers.value) || 0;
+      const per = parseFloat(inputPer.value) || 0;
+      const problems = inputProblems.value.trim();
+      
+      if (!revenue && !customers && !per) {
+        showToast('请至少填写实收、客流或人均');
+        return;
+      }
+      
+      // Collect all data
+      currentData = {
+        date: inputDate.value,
+        shop: shop,
+        revenue: revenue,
+        rate: parseFloat(inputRate.value) || 0,
+        orders: parseInt(inputOrders.value) || 0,
+        customers: customers,
+        per: per,
+        checkin: parseInt(inputCheckin.value) || 0,
+        good: parseInt(inputGood.value) || 0,
+        bad: parseInt(inputBad.value) || 0,
+        lunch: {
+          food: parseFloat(inputLunchFood.value) || 0,
+          drink: parseFloat(inputLunchDrink.value) || 0,
+          other: parseFloat(inputLunchOther.value) || 0,
+          pax: parseInt(inputLunchPax.value) || 0,
+          orders: parseInt(inputLunchOrders.value) || 0,
+          per: parseFloat(inputLunchPer.value) || 0
+        },
+        dinner: {
+          food: parseFloat(inputDinnerFood.value) || 0,
+          drink: parseFloat(inputDinnerDrink.value) || 0,
+          other: parseFloat(inputDinnerOther.value) || 0,
+          pax: parseInt(inputDinnerPax.value) || 0,
+          orders: parseInt(inputDinnerOrders.value) || 0,
+          per: parseFloat(inputDinnerPer.value) || 0
+        },
+        delivery: {
+          count: parseInt(inputDeliveryCount.value) || 0,
+          revenue: parseFloat(inputDeliveryRevenue.value) || 0
+        },
+        loss: parseFloat(inputLoss.value) || 0,
+        problems: problems,
+        summary: '',
+        analysis: '',
+        suggestions: ''
+      };
+      
+      // Calculate derived values
+      const lunchTotal = currentData.lunch.food + currentData.lunch.drink + currentData.lunch.other;
+      const dinnerTotal = currentData.dinner.food + currentData.dinner.drink + currentData.dinner.other;
+      const totalDine = lunchTotal + dinnerTotal;
+      const deliveryRatio = revenue > 0 ? ((currentData.delivery.revenue / revenue) * 100).toFixed(1) : 0;
+      const lossRatio = revenue > 0 ? ((currentData.loss / revenue) * 100).toFixed(1) : 0;
+      const goodRate = (currentData.good + currentData.bad) > 0 
+        ? ((currentData.good / (currentData.good + currentData.bad)) * 100).toFixed(1) 
+        : null;
+      
+      // Generate summary
+      let summary = shop ? `${shop} ` : '';
+      summary += `${currentData.date}经营数据：` + '\n';
+      summary += `当日实收 ¥${revenue}，`;
+      if (customers > 0) summary += `客流 ${customers}人，`;
+      if (per > 0) summary += `人均 ¥${per}，` + '\n';
+      if (currentData.rate > 0) summary += `月累计达标率 ${currentData.rate}%，`;
+      if (currentData.orders > 0) summary += `订单数 ${currentData.orders}单，` + '\n';
+      
+      if (totalDine > 0) {
+        summary += `堂食营收 ¥${totalDine.toFixed(0)}（午市¥${lunchTotal.toFixed(0)}/晚市¥${dinnerTotal.toFixed(0)}）` + '\n';
+      }
+      if (currentData.delivery.revenue > 0) {
+        summary += `外卖 ¥${currentData.delivery.revenue}（${currentData.delivery.count}单），占比${deliveryRatio}%` + '\n';
+      }
+      if (currentData.loss > 0) {
+        summary += `食材损耗 ¥${currentData.loss}（损耗率${lossRatio}%）` + '\n';
+      }
+      
+      // Performance assessment
+      if (revenue >= 10000) {
+        summary += '\n整体表现：业绩优秀，保持良好势头。';
+      } else if (revenue >= 5000) {
+        summary += '\n整体表现：业绩中等，有提升空间。';
+      } else if (revenue > 0) {
+        summary += '\n整体表现：业绩偏低，需关注改进。';
+      }
+      
+      // Generate analysis
+      let analysis = '';
+      if (problems) {
+        analysis = `针对「${problems}」的分析：` + '\n\n';
+        
+        if (problems.includes('出餐') || problems.includes('等待')) {
+          analysis += '• 出餐速度问题通常与厨房备餐流程、人员配置相关' + '\n';
+          analysis += '• 可检查高峰时段订单集中度，优化备餐动线' + '\n';
+          analysis += '• 建议提前预备半成品，提高出餐效率' + '\n';
+          analysis += '• 午市和晚市可错峰备餐，提前准备高峰期菜品';
+        } else if (problems.includes('客流') || problems.includes('人少')) {
+          analysis += '• 客流下降可能受天气、节假日、周边竞争影响' + '\n';
+          analysis += '• 建议分析午市/晚市客流分布，找出低峰原因' + '\n';
+          analysis += '• 可考虑通过营销活动吸引新客，或优化午市套餐';
+        } else if (problems.includes('投诉') || problems.includes('差评')) {
+          analysis += '• 服务投诉需关注员工培训与流程优化' + '\n';
+          if (currentData.bad > 0) analysis += `• 本日差评${currentData.bad}条，建议回访了解详情` + '\n';
+          analysis += '• 可建立快速响应机制，及时安抚顾客' + '\n';
+          analysis += '• 复盘差评原因，制定针对性改进措施';
+        } else if (problems.includes('损耗') || problems.includes('浪费')) {
+          analysis += '• 食材损耗与备货准确性、存储条件相关' + '\n';
+          analysis += '• 建议优化订货流程，减少积压' + '\n';
+          analysis += '• 加强食材先进先出管理' + '\n';
+          analysis += `• 当前损耗率${lossRatio}%，需重点关注`;
+        } else if (problems.includes('翻台') || problems.includes('座位')) {
+          analysis += '• 座位周转问题影响晚市高峰接待能力' + '\n';
+          analysis += '• 可优化点餐-出餐-结账流程' + '\n';
+          analysis += '• 考虑推出限时用餐优惠，提高翻台率' + '\n';
+          analysis += '• 高峰期可提前预约、分流顾客';
+        } else {
+          analysis += '• 建议详细记录问题发生的时间、环境和背景' + '\n';
+          analysis += '• 拆解问题根因，制定针对性的解决方案' + '\n';
+          analysis += '• 跟踪改善效果，持续优化';
+        }
+      } else {
+        analysis = '今日未记录主要问题，基础运营相对平稳。' + '\n\n';
+        
+        if (lossRatio > 5) {
+          analysis += `• 食材损耗率${lossRatio}%偏高，建议重点关注` + '\n';
+          analysis += '• 盘点损耗原因（过期/变质/操作浪费）' + '\n';
+          analysis += '• 优化采购计划，加强后厨培训' + '\n\n';
+        }
+        
+        if (deliveryRatio > 40) {
+          analysis += `• 外卖占比${deliveryRatio}%偏高，需关注堂食质量` + '\n';
+          analysis += '• 外卖平台抽成较高，影响利润空间' + '\n';
+          analysis += '• 合理控制外卖与堂食比例' + '\n\n';
+        }
+        
+        if (goodRate !== null && goodRate < 80) {
+          analysis += `• 好评率${goodRate}%有提升空间` + '\n';
+          analysis += '• 建议关注顾客反馈，积极改进' + '\n\n';
+        }
+        
+        if (totalDine > 0 && dinnerTotal > lunchTotal * 2) {
+          analysis += '• 晚市营收明显高于午市' + '\n';
+          analysis += '• 可考虑推出午市优惠套餐，吸引午餐客流' + '\n\n';
+        }
+        
+        if (!analysis.endsWith('\n\n')) {
+          analysis += '• 继续保持现有良好做法' + '\n';
+          analysis += '• 关注数据变化，及时发现异常';
+        }
+      }
+      
+      // Generate suggestions
+      let suggestions = '';
+      
+      if (revenue >= 10000) {
+        suggestions = '【高业绩阶段】' + '\n';
+        suggestions += '1. 保持当前运营状态，关注服务品质不下降' + '\n';
+        suggestions += '2. 分析高峰时段，为扩店或增加人手做准备' + '\n';
+        suggestions += '3. 可尝试推出新品或套餐，提升客单价';
+      } else if (revenue >= 5000) {
+        suggestions = '【稳定提升阶段】' + '\n';
+        suggestions += '1. 分析午市/晚市客流时段，优化人力配置' + '\n';
+        suggestions += '2. 优化菜单结构，淘汰低销量菜品' + '\n';
+        suggestions += '3. 加强线上推广，提升店铺曝光率';
+      } else {
+        suggestions = '【业绩突破阶段】' + '\n';
+        suggestions += '1. 深入分析客流下降原因（位置/天气/竞对）' + '\n';
+        suggestions += '2. 检查菜品价格竞争力，考虑适度促销' + '\n';
+        suggestions += '3. 加强客户回访，了解真实需求';
+      }
+      
+      // Conditional suggestions
+      if (currentData.lunch.pax === 0 && currentData.dinner.pax > 0) {
+        suggestions += '\n\n【午市专项】' + '\n';
+        suggestions += '4. 午市暂无数据，建议推出工作日午餐套餐' + '\n';
+        suggestions += '5. 可与附近写字楼合作，拓展午市客源';
+      }
+      
+      if (currentData.checkin > 0) {
+        suggestions += '\n\n【用户运营】' + '\n';
+        suggestions += `${currentData.checkin}人收藏打卡，可回访或发放下次优惠券`;
+      }
+      
+      if (currentData.bad > 0) {
+        suggestions += '\n\n【差评跟进】' + '\n';
+        suggestions += '请及时回访差评顾客，了解原因并改进';
+      }
+      
+      if (currentData.loss > 300) {
+        suggestions += '\n\n【损耗控制】' + '\n';
+        suggestions += '食材损耗偏高，建议每日盘点并优化备货';
+      }
+      
+      // Update UI
+      currentData.summary = summary;
+      currentData.analysis = analysis;
+      currentData.suggestions = suggestions;
+      
+      resultCard.style.display = 'block';
+      resultSummary.textContent = summary;
+      resultSummary.classList.remove('empty');
+      resultAnalysis.textContent = analysis;
+      resultAnalysis.classList.remove('empty');
+      resultSuggestions.textContent = suggestions;
+      resultSuggestions.classList.remove('empty');
+      
+      btnSave.disabled = false;
+      showToast('分析生成成功');
+    }
+    
+    function saveRecord() {
+      if (!currentData.date) {
+        showToast('请选择日期');
+        return;
+      }
+      
+      let records = JSON.parse(localStorage.getItem('restaurant_review_v2') || '[]');
+      
+      const existingIndex = records.findIndex(r => r.date === currentData.date && r.shop === currentData.shop);
+      
+      const record = {
+        id: existingIndex >= 0 ? records[existingIndex].id : generateId(),
+        ...currentData,
+        createdAt: existingIndex >= 0 ? records[existingIndex].createdAt : Date.now(),
+        updatedAt: Date.now()
+      };
+      
+      if (existingIndex >= 0) {
+        records[existingIndex] = record;
+      } else {
+        records.push(record);
+      }
+      
+      records.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      const cutoff = Date.now() - 365 * 24 * 60 * 60 * 1000;
+      records = records.filter(r => r.createdAt > cutoff);
+      
+      localStorage.setItem('restaurant_review_v2', JSON.stringify(records));
+      
+      btnSave.disabled = true;
+      showToast('记录已保存');
+      renderHistory();
+    }
+    
+    function loadTodayRecord() {
+      const today = formatDate(new Date());
+      const records = JSON.parse(localStorage.getItem('restaurant_review_v2') || '[]');
+      const todayRecord = records.find(r => r.date === today);
+      
+      if (todayRecord) {
+        inputDate.value = todayRecord.date || today;
+        inputShop.value = todayRecord.shop || '';
+        inputRevenue.value = todayRecord.revenue || '';
+        inputRate.value = todayRecord.rate || '';
+        inputOrders.value = todayRecord.orders || '';
+        inputCustomers.value = todayRecord.customers || '';
+        inputPer.value = todayRecord.per || '';
+        inputCheckin.value = todayRecord.checkin || '';
+        inputGood.value = todayRecord.good || '';
+        inputBad.value = todayRecord.bad || '';
+        
+        // Lunch
+        inputLunchFood.value = todayRecord.lunch?.food || '';
+        inputLunchDrink.value = todayRecord.lunch?.drink || '';
+        inputLunchOther.value = todayRecord.lunch?.other || '';
+        inputLunchPax.value = todayRecord.lunch?.pax || '';
+        inputLunchOrders.value = todayRecord.lunch?.orders || '';
+        inputLunchPer.value = todayRecord.lunch?.per || '';
+        
+        // Dinner
+        inputDinnerFood.value = todayRecord.dinner?.food || '';
+        inputDinnerDrink.value = todayRecord.dinner?.drink || '';
+        inputDinnerOther.value = todayRecord.dinner?.other || '';
+        inputDinnerPax.value = todayRecord.dinner?.pax || '';
+        inputDinnerOrders.value = todayRecord.dinner?.orders || '';
+        inputDinnerPer.value = todayRecord.dinner?.per || '';
+        
+        // Delivery
+        inputDeliveryCount.value = todayRecord.delivery?.count || '';
+        inputDeliveryRevenue.value = todayRecord.delivery?.revenue || '';
+        
+        inputLoss.value = todayRecord.loss || '';
+        inputProblems.value = todayRecord.problems || '';
+        
+        if (todayRecord.summary) {
+          currentData = { ...todayRecord };
+          resultCard.style.display = 'block';
+          resultSummary.textContent = todayRecord.summary;
+          resultSummary.classList.remove('empty');
+          resultAnalysis.textContent = todayRecord.analysis || '暂无分析';
+          resultAnalysis.classList.remove('empty');
+          resultSuggestions.textContent = todayRecord.suggestions || '暂无建议';
+          resultSuggestions.classList.remove('empty');
+          btnSave.disabled = false;
+        }
+        
+        updateStatsPreview();
+      }
+    }
+    
+    function renderHistory() {
+      const records = JSON.parse(localStorage.getItem('restaurant_review_v2') || '[]');
+      
+      if (records.length === 0) {
+        historyList.innerHTML = '';
+        historyEmpty.style.display = 'block';
+        return;
+      }
+      
+      historyEmpty.style.display = 'none';
+      
+      historyList.innerHTML = records.map(record => `
+        <div class="history-item" data-id="${record.id}">
+          <div class="history-header">
+            <div>
+              <div class="history-shop">${record.shop || '未命名店铺'}</div>
+              <div class="history-date">${formatDisplayDate(record.date)}</div>
+            </div>
+            <button class="history-delete" onclick="deleteRecord('${record.id}', event)">×</button>
+          </div>
+          <div class="history-stats">
+            <span>💰 ¥${record.revenue || 0}</span>
+            <span>👥 ${record.customers || 0}人</span>
+            <span>🚗 ${record.delivery?.count || 0}单</span>
+            <span>📋 ${record.orders || 0}单</span>
+            ${record.rate ? `<span>📈 ${record.rate}%</span>` : ''}
+          </div>
+          <div class="history-detail" id="detail-${record.id}">
+            ${record.problems ? `<p><span class="label">问题：</span>${record.problems}</p>` : ''}
+            ${record.summary ? `<p><span class="label">小结：</span>${record.summary}</p>` : ''}
+            ${record.analysis ? `<p><span class="label">分析：</span>${record.analysis}</p>` : ''}
+            ${record.suggestions ? `<p><span class="label">建议：</span>${record.suggestions}</p>` : ''}
+          </div>
+        </div>
+      `).join('');
+      
+      document.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.classList.contains('history-delete')) return;
+          const detail = item.querySelector('.history-detail');
+          detail.classList.toggle('show');
+        });
+      });
+    }
+    
+    function deleteRecord(id, event) {
+      event.stopPropagation();
+      
+      if (!confirm('确定删除这条记录？')) return;
+      
+      let records = JSON.parse(localStorage.getItem('restaurant_review_v2') || '[]');
+      records = records.filter(r => r.id !== id);
+      localStorage.setItem('restaurant_review_v2', JSON.stringify(records));
+      
+      showToast('记录已删除');
+      renderHistory();
+    }
+    
+    // Utils
+    function formatDate(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+    
+    function formatDisplayDate(dateStr) {
+      const date = new Date(dateStr);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      if (formatDate(date) === formatDate(today)) {
+        return '今天';
+      } else if (formatDate(date) === formatDate(yesterday)) {
+        return '昨天';
+      } else {
+        return `${date.getMonth() + 1}月${date.getDate()}日`;
+      }
+    }
+    
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+    
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+    
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+
+
+</body></html>
